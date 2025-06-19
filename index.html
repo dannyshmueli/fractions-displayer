@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מציג שברים - Fraction Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧮 מציג שברים</h1>
+            <p>עזור לילדים שלך ללמוד שברים בקלות!</p>
+        </header>
+
+        <div class="input-section">
+            <div class="fraction-input">
+                <h3>הזן שבר:</h3>
+                <div class="fraction-form">
+                    <div class="input-group">
+                        <label for="denominator">מכנה:</label>
+                        <input type="number" id="denominator" min="1" max="100" value="4">
+                    </div>
+                    <div class="fraction-line">/</div>
+                    <div class="input-group">
+                        <label for="numerator">מונה:</label>
+                        <input type="number" id="numerator" min="0" max="100" value="1">
+                    </div>
+                </div>
+                <button id="addFraction" class="btn-primary">הוסף שבר</button>
+            </div>
+        </div>
+
+        <div class="visualization-section">
+            <div class="fractions-container" id="fractionsContainer">
+                <!-- Fraction visualizations will be added here -->
+            </div>
+        </div>
+
+        <div class="comparison-section" id="comparisonSection" style="display: none;">
+            <h3>השוואת שברים:</h3>
+            <div id="comparisonResult"></div>
+        </div>
+
+        <div class="controls">
+            <button id="clearAll" class="btn-secondary">נקה הכל</button>
+            <button id="compareAll" class="btn-primary">השווה שברים</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
