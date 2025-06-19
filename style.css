@@ -110,6 +110,8 @@ header p {
     cursor: pointer;
     transition: all 0.3s ease;
     margin: 0 10px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-primary {
@@ -192,6 +194,8 @@ header p {
     left: 10px;
     font-size: 1.2rem;
     transition: all 0.3s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .delete-btn:hover {
@@ -235,28 +239,162 @@ header p {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
     .container {
-        margin: 10px;
+        margin: 0;
         border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    header {
+        padding: 20px 15px;
     }
     
     header h1 {
         font-size: 2rem;
+        margin-bottom: 8px;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    .input-section, .visualization-section, .comparison-section, .controls {
+        padding: 20px 15px;
     }
     
     .fraction-form {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: row;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 25px;
+        flex-wrap: nowrap;
+    }
+    
+    .fraction-line {
+        font-size: 2.5rem;
+        margin: 0 5px;
+    }
+    
+    .input-group {
+        gap: 5px;
+    }
+    
+    .input-group label {
+        font-size: 0.9rem;
+    }
+    
+    .input-group input {
+        width: 65px;
+        height: 50px;
+        font-size: 1.4rem;
+        border-width: 2px;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 15px 25px;
+        font-size: 1rem;
+        margin: 5px;
+        min-width: 120px;
+    }
+    
+    .fraction-display {
+        padding: 15px;
+        margin: 0 5px;
+    }
+    
+    .fraction-label {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+    
+    .fraction-canvas {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .delete-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.3rem;
+        top: 8px;
+        left: 8px;
+    }
+    
+    #comparisonResult {
+        font-size: 1rem;
+        padding: 15px;
+    }
+    
+    .footer {
+        padding: 15px;
+    }
+    
+    .footer-content p {
+        font-size: 0.8rem;
+        margin: 3px 0;
+    }
+}
+
+/* Extra small devices (phones, 320px and down) */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    header p {
+        font-size: 0.9rem;
+    }
+    
+    .fraction-form {
+        flex-direction: row;
+        gap: 8px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: nowrap;
     }
     
     .fraction-line {
         font-size: 2rem;
+        margin: 0 3px;
     }
     
     .input-group input {
         width: 70px;
-        height: 45px;
+        height: 50px;
         font-size: 1.3rem;
+    }
+    
+    .input-group label {
+        font-size: 0.9rem;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 18px 30px;
+        font-size: 1.1rem;
+        min-width: 140px;
+        margin: 8px 5px;
+    }
+    
+    .controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .fraction-label {
+        font-size: 1.2rem;
+    }
+    
+    .delete-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.4rem;
     }
 }
 

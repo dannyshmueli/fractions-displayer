@@ -3,6 +3,7 @@ class FractionVisualizer {
         this.fractions = [];
         this.nextId = 1;
         this.initializeEventListeners();
+        this.initializeResizeHandler();
     }
 
     initializeEventListeners() {
@@ -71,12 +72,17 @@ class FractionVisualizer {
         fractionDiv.className = 'fraction-display new';
         fractionDiv.id = `fraction-${fraction.id}`;
 
+        // Calculate responsive canvas dimensions
+        const isMobile = window.innerWidth <= 768;
+        const canvasWidth = isMobile ? Math.min(350, window.innerWidth - 60) : 700;
+        const canvasHeight = isMobile ? 80 : 120;
+
         fractionDiv.innerHTML = `
             <button class="delete-btn" onclick="fractionVisualizer.deleteFraction(${fraction.id})">×</button>
             <div class="fraction-label">
                 ${fraction.numerator}/${fraction.denominator} = ${fraction.decimal.toFixed(3)}
             </div>
-            <canvas class="fraction-canvas" width="700" height="120"></canvas>
+            <canvas class="fraction-canvas" width="${canvasWidth}" height="${canvasHeight}"></canvas>
         `;
 
         container.appendChild(fractionDiv);
@@ -98,11 +104,13 @@ class FractionVisualizer {
         // Clear canvas
         ctx.clearRect(0, 0, width, height);
 
-        // Calculate dimensions
-        const barWidth = width - 100;
-        const barHeight = 60;
-        const barX = 50;
-        const barY = 30;
+        // Calculate responsive dimensions
+        const isMobile = width <= 350;
+        const margin = isMobile ? 20 : 50;
+        const barWidth = width - (margin * 2);
+        const barHeight = isMobile ? 40 : 60;
+        const barX = margin;
+        const barY = isMobile ? 20 : 30;
         const segmentWidth = barWidth / fraction.denominator;
 
         // Draw the complete bar outline
@@ -148,23 +156,28 @@ class FractionVisualizer {
             ctx.restore();
         }
 
-        // Add labels
+        // Add labels with responsive sizing
         ctx.fillStyle = '#2c3e50';
-        ctx.font = 'bold 16px Arial';
+        const labelFontSize = isMobile ? 12 : 16;
+        const percentageFontSize = isMobile ? 10 : 14;
+        
+        ctx.font = `bold ${labelFontSize}px Arial`;
         ctx.textAlign = 'center';
         
-        // Label each segment
-        for (let i = 0; i < fraction.denominator; i++) {
-            const x = barX + (i * segmentWidth) + (segmentWidth / 2);
-            const text = `${i + 1}`;
-            ctx.fillText(text, x, barY + barHeight + 20);
+        // Label each segment (only if there's enough space)
+        if (segmentWidth >= 25) {
+            for (let i = 0; i < Math.min(fraction.denominator, 20); i++) {
+                const x = barX + (i * segmentWidth) + (segmentWidth / 2);
+                const text = `${i + 1}`;
+                ctx.fillText(text, x, barY + barHeight + (isMobile ? 15 : 20));
+            }
         }
 
         // Add fraction value text
-        ctx.font = 'bold 14px Arial';
+        ctx.font = `bold ${percentageFontSize}px Arial`;
         ctx.textAlign = 'right';
         const percentage = ((fraction.numerator / fraction.denominator) * 100).toFixed(1);
-        ctx.fillText(`${percentage}%`, width - 10, barY - 10);
+        ctx.fillText(`${percentage}%`, width - (isMobile ? 5 : 10), barY - (isMobile ? 5 : 10));
     }
 
     getFractionColor(decimal) {
@@ -215,21 +228,28 @@ class FractionVisualizer {
         
         let comparisonHTML = '<div style="font-size: 1.4rem; margin-bottom: 20px;"><strong>סדר השברים מהקטן לגדול:</strong></div>';
         
-        comparisonHTML += '<div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;">';
+        const isMobile = window.innerWidth <= 768;
+        const cardStyle = isMobile ? 
+            'background: ${color}; color: white; padding: 12px; border-radius: 8px; text-align: center; min-width: 90px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); margin: 5px;' :
+            'background: ${color}; color: white; padding: 15px; border-radius: 10px; text-align: center; min-width: 120px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);';
+        
+        comparisonHTML += `<div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: ${isMobile ? '8px' : '15px'};">`;
         
         sortedFractions.forEach((fraction, index) => {
             const percentage = ((fraction.numerator / fraction.denominator) * 100).toFixed(1);
             const color = this.getFractionColor(fraction.decimal);
+            const fontSize = isMobile ? '1.1rem' : '1.3rem';
+            const smallFontSize = isMobile ? '0.8rem' : '0.9rem';
             
             comparisonHTML += `
-                <div style="background: ${color}; color: white; padding: 15px; border-radius: 10px; text-align: center; min-width: 120px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                    <div style="font-size: 1.3rem; font-weight: bold;">${fraction.numerator}/${fraction.denominator}</div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">${percentage}%</div>
+                <div style="${cardStyle.replace('${color}', color)}">
+                    <div style="font-size: ${fontSize}; font-weight: bold;">${fraction.numerator}/${fraction.denominator}</div>
+                    <div style="font-size: ${smallFontSize}; opacity: 0.9;">${percentage}%</div>
                 </div>
             `;
             
             if (index < sortedFractions.length - 1) {
-                comparisonHTML += '<div style="font-size: 2rem; color: #6c757d;">❮</div>';
+                comparisonHTML += `<div style="font-size: ${isMobile ? '1.5rem' : '2rem'}; color: #6c757d;">❮</div>`;
             }
         });
         
@@ -247,6 +267,32 @@ class FractionVisualizer {
         `;
 
         document.getElementById('comparisonResult').innerHTML = comparisonHTML;
+    }
+
+    initializeResizeHandler() {
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                this.redrawAllFractions();
+            }, 250);
+        });
+    }
+
+    redrawAllFractions() {
+        this.fractions.forEach(fraction => {
+            const fractionElement = document.getElementById(`fraction-${fraction.id}`);
+            if (fractionElement) {
+                const canvas = fractionElement.querySelector('canvas');
+                const isMobile = window.innerWidth <= 768;
+                const newWidth = isMobile ? Math.min(350, window.innerWidth - 60) : 700;
+                const newHeight = isMobile ? 80 : 120;
+                
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                this.drawFraction(canvas, fraction);
+            }
+        });
     }
 }
 
