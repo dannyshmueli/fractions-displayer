@@ -64,10 +64,22 @@ Visit: [Your Netlify URL will go here]
 
 That's it! No build process needed.
 
+## Creator
+
+Created with ❤️ by [Danny Shmueli](https://dannyshmueli.com)
+
 ## Contributing
 
 Feel free to open issues or submit pull requests to improve this educational tool!
 
 ## License
 
-MIT License - feel free to use this for educational purposes! 
+**Free to use and redistribute** - This project is released under the MIT License.
+
+You are free to:
+- ✅ Use this tool for personal or educational purposes
+- ✅ Modify and distribute your own versions
+- ✅ Include it in your educational materials
+- ✅ Use it in schools and learning institutions
+
+**Attribution appreciated but not required!** 
